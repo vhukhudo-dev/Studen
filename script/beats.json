@@ -1,131 +1,419 @@
 {
   "slides": [
-    { "n": 1, "title": "The operational shock" },
-    { "n": 2, "title": "Strategic diagnostics" },
-    { "n": 3, "title": "Continuity and recovery defence" },
-    { "n": 4, "title": "Board decision" }
+    {
+      "n": 1,
+      "title": "The operational shock"
+    },
+    {
+      "n": 2,
+      "title": "Strategic diagnostics"
+    },
+    {
+      "n": 3,
+      "title": "Continuity and recovery defence"
+    },
+    {
+      "n": 4,
+      "title": "Board decision"
+    }
   ],
   "beats": [
-    { "id": "s1a", "slide": 1, "scene": "title", "step": 0,
+    {
+      "id": "s0",
+      "slide": 1,
+      "scene": "title",
+      "step": 0,
+      "text": "Hey everyone, so welcome to this deep dive on Sixty60. So I'm going to start with the operational shock.",
+      "headline": "A deep dive on Sixty60",
+      "sub": "Starting with the operational shock"
+    },
+    {
+      "id": "s1a",
+      "slide": 1,
+      "scene": "title",
+      "step": 1,
       "text": "Chair and members of the Audit and Risk Committee,",
-      "headline": "Audit & Risk Committee", "sub": "Sixty60 operational resilience briefing" },
-    { "id": "s1b", "slide": 1, "scene": "surge", "step": 0,
+      "headline": "Audit & Risk Committee",
+      "sub": "Sixty60 operational resilience briefing"
+    },
+    {
+      "id": "s1b",
+      "slide": 1,
+      "scene": "surge",
+      "step": 0,
       "text": "Sixty60 faces a three-hundred-percent order surge,",
-      "headline": "300% order surge", "sub": "Demand far beyond normal store capacity" },
-    { "id": "s1c", "slide": 1, "scene": "power", "step": 0,
+      "headline": "300% order surge",
+      "sub": "Demand far beyond normal store capacity"
+    },
+    {
+      "id": "s1c",
+      "slide": 1,
+      "scene": "power",
+      "step": 0,
       "text": "Stage Six load-shedding",
-      "headline": "Stage 6 load-shedding", "sub": "Stores lose power and connectivity" },
-    { "id": "s1d", "slide": 1, "scene": "clock", "step": 0,
+      "headline": "Stage 6 load-shedding",
+      "sub": "Stores lose power and connectivity"
+    },
+    {
+      "id": "s1d",
+      "slide": 1,
+      "scene": "clock",
+      "step": 0,
       "text": "and thirty-minute stock delays.",
-      "headline": "30-minute stock delays", "sub": "The app shows stock the store no longer has" },
-    { "id": "s1e", "slide": 1, "scene": "goods", "step": 0,
+      "headline": "30-minute stock delays",
+      "sub": "The app shows stock the store no longer has"
+    },
+    {
+      "id": "s1e",
+      "slide": 1,
+      "scene": "goods",
+      "step": 0,
       "text": "Customers order unavailable goods,",
-      "headline": "Customers order unavailable goods", "sub": "Orders fail at the picking stage" },
-    { "id": "s1f", "slide": 1, "scene": "phone", "step": 0,
+      "headline": "Customers order unavailable goods",
+      "sub": "Orders fail at the picking stage"
+    },
+    {
+      "id": "s1f",
+      "slide": 1,
+      "scene": "phone",
+      "step": 0,
       "text": "while drivers save addresses and gate codes on personal phones.",
-      "headline": "Gate codes on personal phones", "sub": "Customer addresses leave controlled systems" },
-    { "id": "s1g", "slide": 1, "scene": "conveyor", "step": 0,
+      "headline": "Gate codes on personal phones",
+      "sub": "Customer addresses leave controlled systems"
+    },
+    {
+      "id": "s1g",
+      "slide": 1,
+      "scene": "conveyor",
+      "step": 0,
       "text": "Managers' shortcuts keep orders moving,",
-      "headline": "Shortcuts keep orders moving", "sub": "…by bypassing the controls" },
-    { "id": "s1h", "slide": 1, "scene": "pillars", "step": 0,
+      "headline": "Shortcuts keep orders moving",
+      "sub": "…by bypassing the controls"
+    },
+    {
+      "id": "s1h",
+      "slide": 1,
+      "scene": "pillars",
+      "step": 0,
       "text": "but the Board must direct resilience investment, privacy safeguards and accountability.",
-      "headline": "The Board must direct", "sub": "Investment · Safeguards · Accountability",
-      "cues": ["resilience investment", "privacy safeguards", "and accountability"] },
-    { "id": "s1i", "slide": 1, "scene": "risk", "step": 0,
+      "headline": "The Board must direct",
+      "sub": "Investment · Safeguards · Accountability",
+      "cues": [
+        "resilience investment",
+        "privacy safeguards",
+        "and accountability"
+      ]
+    },
+    {
+      "id": "s1i",
+      "slide": 1,
+      "scene": "risk",
+      "step": 0,
       "text": "Inaction means cancelled orders, lost trust and serious POPIA Section Nineteen exposure.",
-      "headline": "Inaction = POPIA s19 exposure", "sub": "Cancelled orders · Lost trust · Legal risk",
-      "cues": ["cancelled orders", "lost trust", "serious POPIA"] },
-    { "id": "s1j", "slide": 1, "scene": "promise", "step": 0,
+      "headline": "Inaction = POPIA s19 exposure",
+      "sub": "Cancelled orders · Lost trust · Legal risk",
+      "cues": [
+        "cancelled orders",
+        "lost trust",
+        "serious POPIA"
+      ]
+    },
+    {
+      "id": "s1j",
+      "slide": 1,
+      "scene": "promise",
+      "step": 0,
       "text": "Protecting the sixty-minute promise requires resilient stores and secure delivery.",
-      "headline": "Protect the 60-minute promise", "sub": "Resilient stores + secure delivery",
-      "cues": ["resilient stores", "secure delivery"] },
-
-    { "id": "s2a", "slide": 2, "scene": "sam", "step": 0,
-      "text": "SAM exposes four connected gaps.",
-      "headline": "Strategic Alignment Model", "sub": "Four connected gaps" },
-    { "id": "s2b", "slide": 2, "scene": "sam", "step": 1,
+      "headline": "Protect the 60-minute promise",
+      "sub": "Resilient stores + secure delivery",
+      "cues": [
+        "resilient stores",
+        "secure delivery"
+      ]
+    },
+    {
+      "id": "s2a",
+      "slide": 2,
+      "scene": "sam",
+      "step": 0,
+      "text": "Strategic diagnosis. SAM exposes four connected gaps.",
+      "headline": "Strategic Alignment Model",
+      "sub": "Four connected gaps"
+    },
+    {
+      "id": "s2b",
+      "slide": 2,
+      "scene": "sam",
+      "step": 1,
       "text": "Business strategy promises fast delivery.",
-      "headline": "Business strategy", "sub": "Promises fast delivery" },
-    { "id": "s2c", "slide": 2, "scene": "sam", "step": 2,
+      "headline": "Business strategy",
+      "sub": "Promises fast delivery"
+    },
+    {
+      "id": "s2c",
+      "slide": 2,
+      "scene": "sam",
+      "step": 2,
       "text": "IT strategy relies on cloud routing.",
-      "headline": "IT strategy", "sub": "Relies on cloud routing" },
-    { "id": "s2d", "slide": 2, "scene": "sam", "step": 3,
+      "headline": "IT strategy",
+      "sub": "Relies on cloud routing"
+    },
+    {
+      "id": "s2d",
+      "slide": 2,
+      "scene": "sam",
+      "step": 3,
       "text": "Business infrastructure and processes still depend on manual power transfers and informal onboarding.",
-      "headline": "Business infrastructure & processes", "sub": "Manual power transfers · informal onboarding" },
-    { "id": "s2e", "slide": 2, "scene": "sam", "step": 4,
+      "headline": "Business infrastructure & processes",
+      "sub": "Manual power transfers · informal onboarding"
+    },
+    {
+      "id": "s2e",
+      "slide": 2,
+      "scene": "sam",
+      "step": 4,
       "text": "IT infrastructure and processes produce stale stock and unmanaged endpoints.",
-      "headline": "IT infrastructure & processes", "sub": "Stale stock · unmanaged endpoints" },
-    { "id": "s2f", "slide": 2, "scene": "drift", "step": 0,
+      "headline": "IT infrastructure & processes",
+      "sub": "Stale stock · unmanaged endpoints"
+    },
+    {
+      "id": "s2f",
+      "slide": 2,
+      "scene": "drift",
+      "step": 0,
       "text": "Strategic drift occurs because growth has outpaced store resilience:",
-      "headline": "Strategic drift", "sub": "Growth has outpaced store resilience" },
-    { "id": "s2g", "slide": 2, "scene": "drift", "step": 1,
+      "headline": "Strategic drift",
+      "sub": "Growth has outpaced store resilience"
+    },
+    {
+      "id": "s2g",
+      "slide": 2,
+      "scene": "drift",
+      "step": 1,
       "text": "available cloud services cannot correct delayed store data.",
-      "headline": "The cloud can't fix late data", "sub": "Delayed store data stays wrong upstream" },
-    { "id": "s2h", "slide": 2, "scene": "maturity", "step": 0,
+      "headline": "The cloud can't fix late data",
+      "sub": "Delayed store data stays wrong upstream"
+    },
+    {
+      "id": "s2h",
+      "slide": 2,
+      "scene": "maturity",
+      "step": 0,
       "text": "Pingo's provisional maturity rating is Level One, Initial:",
-      "headline": "Maturity: Level 1 — Initial", "sub": "Provisional rating for Pingo" },
-    { "id": "s2i", "slide": 2, "scene": "maturity", "step": 1,
+      "headline": "Maturity: Level 1 — Initial",
+      "sub": "Provisional rating for Pingo"
+    },
+    {
+      "id": "s2i",
+      "slide": 2,
+      "scene": "maturity",
+      "step": 1,
       "text": "recruitment and security depend on individuals rather than repeatable, controlled procedures.",
-      "headline": "People, not procedures", "sub": "Recruitment and security depend on individuals" },
-    { "id": "s2j", "slide": 2, "scene": "maturity", "step": 2,
+      "headline": "People, not procedures",
+      "sub": "Recruitment and security depend on individuals"
+    },
+    {
+      "id": "s2j",
+      "slide": 2,
+      "scene": "maturity",
+      "step": 2,
       "text": "This is a benchmark, not a formal appraisal. The brief mixes capability and maturity terminology, so the scale needs course confirmation.",
-      "headline": "A benchmark, not an appraisal", "sub": "Scale terminology needs course confirmation" },
-    { "id": "s2k", "slide": 2, "scene": "controls", "step": 0,
+      "headline": "A benchmark, not an appraisal",
+      "sub": "Scale terminology needs course confirmation"
+    },
+    {
+      "id": "s2k",
+      "slide": 2,
+      "scene": "controls",
+      "step": 0,
       "text": "Unvetted drivers and uncontrolled customer data create serious Section Nineteen safeguard risks.",
-      "headline": "Section 19 safeguard risks", "sub": "Unvetted drivers · uncontrolled customer data" },
-    { "id": "s2l", "slide": 2, "scene": "controls", "step": 1,
+      "headline": "Section 19 safeguard risks",
+      "sub": "Unvetted drivers · uncontrolled customer data"
+    },
+    {
+      "id": "s2l",
+      "slide": 2,
+      "scene": "controls",
+      "step": 1,
       "text": "Require controlled access, vetted onboarding and clear accountability.",
-      "headline": "Require the controls", "sub": "Access · Onboarding · Accountability",
-      "cues": ["controlled access", "vetted onboarding", "clear accountability"] },
-
-    { "id": "s3a", "slide": 3, "scene": "mtd", "step": 0,
-      "text": "Maximum downtime is thirty minutes for stock-valid fulfilment and fifteen for secure delivery-detail access, protecting the sixty-minute promise.",
-      "headline": "Maximum tolerable downtime", "sub": "30 min fulfilment · 15 min delivery-detail access",
-      "cues": ["thirty minutes", "and fifteen"] },
-    { "id": "s3b", "slide": 3, "scene": "mtd", "step": 1,
-      "text": "Restore sync fifteen minutes from the crash and secure dispatch within ten: both leave recovery headroom.",
-      "headline": "Recovery time objectives", "sub": "Sync in 15 · dispatch in 10 · headroom left",
-      "cues": ["restore sync", "secure dispatch", "both leave"] },
-    { "id": "s3c", "slide": 3, "scene": "rpo", "step": 0,
-      "text": "Five-minute RPO caps acceptable log loss without an unproven zero-loss promise;",
-      "headline": "RPO: 5 minutes", "sub": "Capped log loss, no unproven zero-loss promise" },
-    { "id": "s3d", "slide": 3, "scene": "rpo", "step": 1,
-      "text": "offline site loss still needs independent-copy proof.",
-      "headline": "Prove the independent copy", "sub": "Offline site loss still needs evidence" },
-    { "id": "s3e", "slide": 3, "scene": "standby", "step": 0,
-      "text": "Choose independent warm standby: moderate capital and running costs, below hot replication; cold is too slow.",
-      "headline": "Choose warm standby", "sub": "Moderate cost · below hot · cold is too slow",
-      "cues": ["warm standby", "hot replication", "cold is too slow"] },
-    { "id": "s3f", "slide": 3, "scene": "links", "step": 0,
-      "text": "Backup power and links must prove fifteen-minute sync.",
-      "headline": "Prove 15-minute sync", "sub": "Backup power and links under test" },
-    { "id": "s3g", "slide": 3, "scene": "links", "step": 1,
-      "text": "Losing both links breaches that target.",
-      "headline": "Both links down = breach", "sub": "The 15-minute target fails" },
-    { "id": "s3h", "slide": 3, "scene": "languages", "step": 0,
-      "text": "English, isiZulu and Afrikaans instructions support safe, consistent action; fluent review remains required.",
-      "headline": "Instructions in three languages", "sub": "Fluent review still required",
-      "cues": ["English", "isiZulu", "Afrikaans", "fluent review"] },
-
-    { "id": "s4a", "slide": 4, "scene": "pilot", "step": 0,
-      "text": "Approve a thirty-day pilot and review by day sixty.",
-      "headline": "Approve a 30-day pilot", "sub": "Review by day 60",
-      "cues": ["thirty-day pilot", "review by day sixty"] },
-    { "id": "s4b", "slide": 4, "scene": "kpis", "step": 0,
-      "text": "Monitor stock age above two minutes, sync beyond fifteen, dispatch beyond ten, data loss above five, and any unmanaged access.",
-      "headline": "Monitor five triggers", "sub": "Breach any one and we act",
-      "cues": ["stock age", "sync beyond", "dispatch beyond", "data loss", "any unmanaged"] },
-    { "id": "s4c", "slide": 4, "scene": "gates", "step": 0,
-      "text": "Require successful retests and cost approval before rollout.",
-      "headline": "Gates before rollout", "sub": "Retests passed · costs approved",
-      "cues": ["successful retests", "cost approval", "before rollout"] },
-    { "id": "s4d", "slide": 4, "scene": "protect", "step": 0,
-      "text": "These controls protect market share, customer trust and retail resilience.",
-      "headline": "What these controls protect", "sub": "Market share · Customer trust · Retail resilience",
-      "cues": ["market share", "customer trust", "retail resilience"] },
-    { "id": "s4e", "slide": 4, "scene": "signoff", "step": 0,
-      "text": "I request formal sign-off for the pilot, executive accountability and evidence-based rollout.",
-      "headline": "Request: formal sign-off", "sub": "Executive accountability · evidence-based rollout",
-      "cues": ["formal sign-off", "executive accountability", "evidence-based rollout"] }
+      "headline": "Require the controls",
+      "sub": "Access · Onboarding · Accountability",
+      "cues": [
+        "controlled access",
+        "vetted onboarding",
+        "clear accountability"
+      ]
+    },
+    {
+      "id": "s3a",
+      "slide": 3,
+      "scene": "mtd",
+      "step": 0,
+      "text": "Continuity and recovery defence. Maximum downtime is thirty minutes for stock-valid fulfilment and fifteen for secure delivery-detail access, protecting the sixty-minute promise.",
+      "headline": "Maximum tolerable downtime",
+      "sub": "30 min fulfilment · 15 min delivery-detail access",
+      "cues": [
+        "thirty minutes",
+        "and fifteen"
+      ]
+    },
+    {
+      "id": "s3b",
+      "slide": 3,
+      "scene": "mtd",
+      "step": 1,
+      "text": "We aim to restore stock updates within 15 minutes and secure delivery access within 10 minutes. This gives us enough time to recover before reaching the maximum downtime.",
+      "headline": "Recovery targets",
+      "sub": "Stock updates in 15 min · delivery access in 10 min",
+      "cues": [
+        "restore stock updates",
+        "secure delivery access",
+        "enough time"
+      ]
+    },
+    {
+      "id": "s3c",
+      "slide": 3,
+      "scene": "rpo",
+      "step": 0,
+      "text": "We allow a maximum of five minutes of data loss.",
+      "headline": "Max 5 minutes of data loss",
+      "sub": "Our recovery point objective",
+      "cues": []
+    },
+    {
+      "id": "s3d",
+      "slide": 3,
+      "scene": "rpo",
+      "step": 1,
+      "text": "However, we must still test whether our system backup can protect data when a system goes offline.",
+      "headline": "Test the backup offline",
+      "sub": "Can it protect data when a site goes down?"
+    },
+    {
+      "id": "s3e",
+      "slide": 3,
+      "scene": "standby",
+      "step": 0,
+      "text": "We recommended a warm standby system because it costs less than a hot standby system and recovers faster than a cold standby system.",
+      "headline": "Recommend warm standby",
+      "sub": "Cheaper than hot · faster than cold",
+      "cues": [
+        "warm standby",
+        "hot standby",
+        "cold standby"
+      ]
+    },
+    {
+      "id": "s3f",
+      "slide": 3,
+      "scene": "links",
+      "step": 0,
+      "text": "Backup power and internet connection must support recovery within fifteen minutes.",
+      "headline": "Recover within 15 minutes",
+      "sub": "Backup power + internet connection"
+    },
+    {
+      "id": "s3g",
+      "slide": 3,
+      "scene": "links",
+      "step": 1,
+      "text": "If both connections fail, we may not meet these targets.",
+      "headline": "Both connections fail = targets missed",
+      "sub": ""
+    },
+    {
+      "id": "s3h",
+      "slide": 3,
+      "scene": "languages",
+      "step": 0,
+      "text": "Instructions in English, isiZulu and Afrikaans will help staff follow the correct steps. These instructions must also be checked for accuracy.",
+      "headline": "Instructions in three languages",
+      "sub": "Checked for accuracy",
+      "cues": [
+        "English",
+        "isiZulu",
+        "Afrikaans",
+        "checked for accuracy"
+      ]
+    },
+    {
+      "id": "s4a",
+      "slide": 4,
+      "scene": "pilot",
+      "step": 0,
+      "text": "Then we go to the board decision. We recommend starting with a thirty day pilot, reviewing the results after sixty days.",
+      "headline": "Approve a 30-day pilot",
+      "sub": "Review the results after 60 days",
+      "cues": [
+        "thirty day pilot",
+        "sixty days"
+      ]
+    },
+    {
+      "id": "s4b",
+      "slide": 4,
+      "scene": "kpis",
+      "step": 0,
+      "text": "We will monitor stock delays, system recovery time, possible data loss and unauthorised access.",
+      "headline": "What we will monitor",
+      "sub": "Four warning signals",
+      "cues": [
+        "stock delays",
+        "system recovery time",
+        "possible data loss",
+        "unauthorised access"
+      ]
+    },
+    {
+      "id": "s4c",
+      "slide": 4,
+      "scene": "gates",
+      "step": 0,
+      "text": "Before introducing the system to all stores, we must test it again and approve the costs.",
+      "headline": "Before all stores",
+      "sub": "Test again · approve the costs",
+      "cues": [
+        "test it again",
+        "approve the costs"
+      ]
+    },
+    {
+      "id": "s4d",
+      "slide": 4,
+      "scene": "protect",
+      "step": 0,
+      "text": "The improvements will help protect customer trust, keep the delivery running and strengthen the business.",
+      "headline": "What the improvements protect",
+      "sub": "Customer trust · delivery · the business",
+      "cues": [
+        "customer trust",
+        "delivery running",
+        "strengthen the business"
+      ]
+    },
+    {
+      "id": "s4e",
+      "slide": 4,
+      "scene": "signoff",
+      "step": 0,
+      "text": "We ask the board to approve the pilot, assign responsibility to a manager and use the results to decide on the full rollout.",
+      "headline": "Our request to the Board",
+      "sub": "Approve · assign · decide",
+      "cues": [
+        "approve the pilot",
+        "responsibility",
+        "full rollout"
+      ]
+    },
+    {
+      "id": "s4f",
+      "slide": 4,
+      "scene": "thanks",
+      "step": 0,
+      "text": "Thank you.",
+      "headline": "Thank you",
+      "sub": "Sixty60 · Audit & Risk Committee"
+    }
   ]
 }

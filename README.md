@@ -1,43 +1,56 @@
 # Sixty60 Board presentation video
 
-This repo turns a recording of you giving the Audit & Risk Committee speech into a finished video:
+This repo turns recordings of you giving the Audit & Risk Committee talk into a finished video:
 
-- **Full screen:** 3D animations, one for each idea in the speech (+300% surge, Stage 6 load-shedding, the SAM grid, RTO/RPO bars, warm standby, the KPI triggers, sign-off…).
-- **Bottom corner:** your video in a rounded window, like a WhatsApp video call.
-- **Timing:** each animation starts when *you* say those words. The tool listens to your recording and finds when each sentence starts, so pauses, speed changes and small ad-libs are fine.
+- **Full screen:** 3D animations, one for each idea in the talk (+300% surge, Stage 6 load-shedding, the SAM grid, recovery targets, warm standby, the monitoring signals, the request to the Board…).
+- **Your words on screen:** a live caption under each headline. Every word pops in as you say it, and the current word is highlighted.
+- **Bottom corner:** you, in a rounded window, like a WhatsApp video call.
+- **Timing:** each animation starts when *you* say those words, using word-level timestamps from speech recognition.
+- **Clean edit:** several takes are cut into one natural take. Repeats, false starts, stumbles and long pauses are removed.
 
 ## How to use it
 
-1. Put your recording(s) in `input/`. You can use one video of the whole speech, or one clip per slide named so they sort in order (`1.mp4`, `2.mp4`, `3.mp4`, `4.mp4`).
-2. Run:
+```bash
+npm install                     # three.js (first time only)
+tools/get_model.sh              # speech recogniser, ~480 MB (first time only)
 
-   ```bash
-   npm install                      # three.js (first time only)
-   pip install pocketsphinx         # speech recogniser (first time only)
-   python3 tools/build.py input/*.mp4               # presenter bottom-right
-   python3 tools/build.py input/*.mp4 --corner left # presenter bottom-left
-   ```
+# Several takes -> one clean edit (what was used for the current video):
+python3 tools/build.py --edit script/edit.json
 
-3. The result is `output/final.mp4` (1920×1080, 30 fps, your audio).
+# Or a single clean take / clips joined in order:
+python3 tools/build.py input/presentation.mp4
+python3 tools/build.py input/*.mp4 --corner left   # presenter bottom-left
+```
 
-A 3-minute speech takes about 25–30 minutes to render on 4 CPU cores.
+The result is `output/final.mp4` (1920×1080, 30 fps, your audio). A 6-minute talk takes about an hour to render on 4 CPU cores.
+
+### Making an edit from several takes
+
+1. Put the takes in `input/raw/` and transcribe them:
+   `python3 tools/transcribe.py work/clips/*.wav` (the build makes the wavs). This writes `work/clips/<take>.words.json` with every word and its time.
+2. In `script/edit.json`, list which words of which take to keep, in order, as `[take, first word, last word]`. Leave out repeats and stumbles. `"drop"` removes exact seconds inside a take (for a stutter the recogniser didn't write down). `"max_pause"` shortens long pauses, and `"tail"` holds the last frame at the end.
+3. `python3 tools/build.py --edit script/edit.json`
+
+`tools/edit.py` places every cut in a real pause, never inside a word (it avoids the short silences inside consonants like "k"). It never trims a quiet word, snaps cuts to video frames so sound and picture stay in sync, and re-times every kept word onto the edited video.
 
 ## How it works
 
 | Step | File | What it does |
 | --- | --- | --- |
-| Script | `script/beats.json` | The speech split into 35 "beats" (sentences). Each beat has an on-screen headline, a 3D scene, and optional *cue* phrases. Cues make parts of a scene appear on specific words, e.g. each of the five KPI tiles appears as you name it. |
-| Sync | `tools/align.py` | Runs offline speech recognition (pocketsphinx) with a language model built from the script, matches what it hears back to the script, and snaps each beat to the moment you start speaking after a pause. Writes `script/timings.json`. On a test recording it placed sentence starts within 0.02 s typically, 0.6 s worst case. |
-| Animation | `animation/` | A three.js scene (`scenes.js`: 24 scenes; `kit.js`: shared 3D parts). It is deterministic: `renderAt(t)` draws the exact frame for time `t`. |
-| Render | `tools/render.mjs` | Steps headless Chromium frame by frame, using several workers in parallel, and encodes `work/animation.mp4`. |
-| Compose | `tools/build.py` | Joins your clips, extracts the voice, runs the sync and the render, then overlays your video bottom-right (or left) with rounded corners, a border and a shadow. |
+| Script | `script/beats.json` | The talk split into 37 "beats" (sentences), worded the way you said them. Each beat has a headline, a 3D scene, and optional *cue* phrases that bring in parts of a scene on specific words (e.g. each monitoring tile appears as you name it). |
+| Transcribe | `tools/transcribe.py` | NVIDIA Parakeet (sherpa-onnx), offline. Word-level timestamps. |
+| Edit | `tools/edit.py` + `script/edit.json` | Cuts the takes into one video, `work/presenter.mp4`, plus its word timings. |
+| Sync | `tools/align.py` | Matches the transcript to the beats. Writes `script/timings.json`: when each beat and cue starts, plus every caption word's time. Without the model it falls back to pocketsphinx (beat timing only, no live captions). |
+| Animation | `animation/` | three.js (`scenes.js`: 25 scenes; `kit.js`: shared 3D parts; `scene.js`: timeline, camera, captions). Deterministic: `renderAt(t)` draws the exact frame for time `t`. |
+| Render | `tools/render.mjs` | Steps headless Chromium frame by frame, with parallel workers, into `work/animation.mp4`. |
+| Compose | `tools/build.py` | Runs the steps above, then overlays you bottom-right (or left) with rounded corners, a border and a shadow. |
 
 ## Fixing timing by hand
 
-If a visual lands too early or late, edit the `start` (seconds) of that beat in `script/timings.json` (written by the sync step; not kept in git). Then rebuild without re-running the sync:
+`script/timings.json` is written by the sync step and isn't kept in git. To nudge a visual, edit that beat's `start` (seconds), then rebuild without re-running the sync:
 
 ```bash
-python3 tools/build.py input/*.mp4 --skip-align
+python3 tools/build.py work/presenter.mp4 --skip-align
 ```
 
 ## Previewing without rendering
@@ -46,10 +59,4 @@ python3 tools/build.py input/*.mp4 --skip-align
 npx serve .          # then open http://localhost:3000/animation/index.html?live&pip
 ```
 
-`?t=60` jumps to 60 s. `?audio=../work/voice.wav&live` plays in sync with your voice (click the page to start).
-
-Quick stills: `node tools/render.mjs --stills 5,30,61.5 --pip` writes PNGs to `work/stills/`.
-
-## Changing the words on screen
-
-The headline and sub-line for each beat are in `script/beats.json`. If you change what you *say*, also update that beat's `text` so the sync can follow you.
+`?t=60` jumps to 60 s. `?audio=../work/voice.wav&live` plays in sync with your voice (click the page to start). Quick stills: `node tools/render.mjs --stills 5,30,61.5 --pip` writes PNGs to `work/stills/`.

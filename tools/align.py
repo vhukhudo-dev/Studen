@@ -43,6 +43,25 @@ EXTRA_DICT = {
 }
 
 
+ONES = "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split()
+TENS = "_ _ twenty thirty forty fifty sixty seventy eighty ninety".split()
+
+
+def num_words(n):
+    """Spoken form of a number as people say it here: 6060 -> sixty sixty, 300 -> three hundred."""
+    if len(n) == 4 and not n.endswith("00"):
+        return num_words(n[:2]) + " " + num_words(n[2:].lstrip("0") or "0")
+    v = int(n)
+    if v < 20:
+        return ONES[v]
+    if v < 100:
+        return TENS[v // 10] + ("" if v % 10 == 0 else " " + ONES[v % 10])
+    if v < 1000:
+        rest = v % 100
+        return ONES[v // 100] + " hundred" + ("" if rest == 0 else " " + num_words(str(rest)))
+    return " ".join(ONES[int(c)] for c in n)
+
+
 def words_of(text):
     t = text.lower().replace("’", "'").replace("—", " ").replace("–", " ")
     t = re.sub(r"[-/]", " ", t)
@@ -52,7 +71,8 @@ def words_of(text):
         w = w.strip("'") if not w.endswith("s'") else w
         if not w:
             continue
-        out.extend(REWRITE.get(w, w).split())
+        w = REWRITE.get(w, w)
+        out.extend(num_words(w).split() if w.isdigit() else w.split())
     return out
 
 
@@ -213,6 +233,43 @@ def snap_starts(times, wt, starts, onsets, n_words):
     return out
 
 
+def from_transcript(path, words):
+    """Per-script-word times from a word-level transcript (tools/transcribe.py or
+    tools/edit.py output), plus the times where speech resumes after a pause."""
+    with open(path) as f:
+        tr = json.load(f)
+    toks, ttimes = [], []
+    for w in tr["words"]:
+        parts = words_of(w["w"])
+        span = max(0.05, w["end"] - w["start"])
+        for k, p in enumerate(parts):
+            toks.append(p)
+            ttimes.append(w["start"] + span * k / len(parts))
+    sm = difflib.SequenceMatcher(a=words, b=toks, autojunk=False)
+    times = [None] * len(words)
+    for a, b, n in sm.get_matching_blocks():
+        if n == 1 and len(words[a]) < 4:
+            continue
+        for i in range(n):
+            times[a + i] = ttimes[b + i]
+    ws = tr["words"]
+    onsets = [ws[0]["start"]] + [w["start"] for p, w in zip(ws, ws[1:]) if w["start"] - p["end"] >= 0.25]
+    return times, onsets, tr["duration"]
+
+
+def caption_words(data, wt):
+    """Every displayed word of every beat with the time it is spoken."""
+    out, k = [], 0
+    for bi, b in enumerate(data["beats"]):
+        for disp in b["text"].split():
+            n = len(words_of(disp))
+            if n == 0:
+                continue
+            out.append({"w": disp, "t": round(wt[k], 3), "b": bi})
+            k += n
+    return out
+
+
 def fill_gaps(times, total):
     """Interpolate missing word times so every beat gets a start."""
     n = len(times)
@@ -237,7 +294,7 @@ def fill_gaps(times, total):
     return out
 
 
-def write(data, beat_starts, cue_times, duration, method, coverage=None):
+def write(data, beat_starts, cue_times, duration, method, coverage=None, captions=None):
     beats = []
     for b, st, cs in zip(data["beats"], beat_starts, cue_times):
         # Land a touch early so the visual is already moving when the words arrive.
@@ -247,6 +304,8 @@ def write(data, beat_starts, cue_times, duration, method, coverage=None):
     out = {"method": method, "duration": round(duration, 3), "beats": beats}
     if coverage is not None:
         out["coverage"] = round(coverage, 3)
+    if captions:
+        out["words"] = captions
     with open(OUT, "w") as f:
         json.dump(out, f, indent=1)
     print(f"wrote {OUT} ({method}, {len(beats)} beats, {duration:.1f}s)")
@@ -256,13 +315,25 @@ def write(data, beat_starts, cue_times, duration, method, coverage=None):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--audio", help="16 kHz mono wav of the speech")
+    ap.add_argument("--words", help="word-level transcript JSON (preferred: accurate timings + captions)")
+    ap.add_argument("--audio", help="16 kHz mono wav of the speech (pocketsphinx fallback)")
     ap.add_argument("--estimate", action="store_true", help="no audio: estimate timings")
     ap.add_argument("--duration", type=float, default=180.0)
     a = ap.parse_args()
 
     data = load_beats()
     words, starts, cues = flatten(data["beats"])
+
+    if a.words:
+        times, onsets, total = from_transcript(a.words, words)
+        cov = sum(t is not None for t in times) / len(words)
+        print(f"matched {cov:.0%} of script words in the transcript", file=sys.stderr)
+        wt = fill_gaps(times, total)
+        beat_starts = snap_starts(times, wt, starts, onsets, len(words))
+        cue_times = [[max(bs, times[c] if times[c] is not None else wt[c]) for c in cs]
+                     for bs, cs in zip(beat_starts, cues)]
+        write(data, beat_starts, cue_times, total, "transcript", cov, caption_words(data, wt))
+        return
 
     if a.estimate or not a.audio:
         wt, starts, cues = estimate(data, a.duration)

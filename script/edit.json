@@ -1,0 +1,77 @@
+{
+  "_note": "Which words of which take to keep, in order. Indices are into work/clips/<take>.words.json (tools/transcribe.py). Left out: three false starts (18.30.54, 18.30.54_3, 18.30.55), 'um', 'pigos'/'restore sing' cut-offs at take ends, 'clean,', 'Continuity and recovery defense continued.' (already said), 'the' in 'allow the a', 're recommend or', 'thirty days, I mean ... rather', and the repeated 'before introducing ... test it against' at the end of 18.30.55_1 (re-said cleanly in 18.30.55_2). Also dropped: a 'Rec-' stutter before 'We recommend starting' (18.30.55_1, 114.8-115.42 s).",
+  "clips": {
+    "A": "input/raw/18.30.54_1.mp4",
+    "B": "input/raw/18.30.54_2.mp4",
+    "C": "input/raw/18.30.54_4.mp4",
+    "D": "input/raw/18.30.55_1.mp4",
+    "E": "input/raw/18.30.55_2.mp4"
+  },
+  "keep": [
+    [
+      "A",
+      0,
+      76
+    ],
+    [
+      "B",
+      0,
+      80
+    ],
+    [
+      "B",
+      82,
+      83
+    ],
+    [
+      "C",
+      0,
+      59
+    ],
+    [
+      "C",
+      61,
+      87
+    ],
+    [
+      "D",
+      5,
+      34
+    ],
+    [
+      "D",
+      36,
+      61
+    ],
+    [
+      "D",
+      65,
+      146
+    ],
+    [
+      "D",
+      151,
+      152
+    ],
+    [
+      "D",
+      154,
+      167
+    ],
+    [
+      "E",
+      0,
+      53
+    ]
+  ],
+  "max_pause": 0.7,
+  "drop": {
+    "D": [
+      [
+        114.8,
+        115.42
+      ]
+    ]
+  },
+  "tail": 3.0
+}

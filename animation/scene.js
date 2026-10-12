@@ -158,6 +158,43 @@ const header = document.getElementById('header');
 const hNum = header.querySelector('.num'), hTitle = header.querySelector('.title');
 const hDots = [...header.querySelectorAll('.dots b')];
 const cap = document.getElementById('caption'), capH = cap.querySelector('.h'), capS = cap.querySelector('.s');
+const capLive = cap.querySelector('.live');
+
+// Live caption lines from the spoken words: short lines, broken at punctuation,
+// never spanning two beats. Each word pops in at the moment it is said.
+const lines = [];
+for (const w of timings.words || []) {
+  let cur = lines[lines.length - 1];
+  if (!cur || cur.b !== w.b || cur.words.length >= 8 || cur.chars + w.w.length > 46 || cur.breakNext) {
+    cur = { b: w.b, words: [], chars: 0, start: w.t }; lines.push(cur);
+  }
+  cur.words.push(w); cur.chars += w.w.length + 1;
+  cur.breakNext = /[.,:;!?]$/.test(w.w) && cur.words.length >= 3;
+}
+lines.forEach((l, i) => { const last = l.words[l.words.length - 1].t; l.end = Math.min(i + 1 < lines.length ? lines[i + 1].start : DURATION, last + 2.5); });
+const hasLive = lines.length > 0;
+capS.style.display = hasLive ? 'none' : '';
+let shownLine = null;
+function renderLive(t) {
+  let line = null;
+  for (const l of lines) { if (l.start - 0.05 <= t) line = l; else break; }
+  if (line !== shownLine) {
+    shownLine = line;
+    capLive.innerHTML = line ? line.words.map((w) => `<span>${w.w.replace(/</g, '&lt;')}</span>`).join('') : '';
+  }
+  if (!line) return;
+  const spans = capLive.children;
+  const fadeOut = clamp((line.end - t) / 0.3);
+  let now = -1;
+  line.words.forEach((w, i) => { if (w.t - 0.05 <= t) now = i; });
+  line.words.forEach((w, i) => {
+    const k = eo((t - (w.t - 0.06)) / 0.2);
+    const el = spans[i];
+    el.style.opacity = (k * fadeOut).toFixed(3);
+    el.style.transform = `translateY(${((1 - k) * 18).toFixed(1)}px) scale(${(0.92 + 0.08 * k).toFixed(3)})`;
+    el.classList.toggle('now', i === now && t < w.t + 0.9);
+  });
+}
 const mixHex = (a, b, k) => '#' + new THREE.Color(a).lerp(new THREE.Color(b), k).getHexString();
 
 const tmpV = new THREE.Vector3(), tmpT = new THREE.Vector3();
@@ -224,8 +261,9 @@ function renderAt(t) {
   if (capH.textContent !== beat.headline) { capH.textContent = beat.headline; capS.textContent = beat.sub || ''; }
   const inA = eo((t - beat.start) / 0.45);
   const outA = beat === beats[beats.length - 1] ? 1 : clamp((beat.end - t) / 0.22);
-  cap.style.opacity = Math.min(inA, outA).toFixed(3);
-  cap.style.transform = `translateY(${((1 - inA) * 26).toFixed(1)}px)`;
+  capH.style.opacity = capS.style.opacity = Math.min(inA, outA).toFixed(3);
+  capH.style.transform = capS.style.transform = `translateY(${((1 - inA) * 26).toFixed(1)}px)`;
+  if (hasLive) renderLive(t);
 
   renderer.render(scene, camera);
 }

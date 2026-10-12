@@ -488,7 +488,7 @@ function mtd({ label }) {
     g.add(glass, cap, fill, head, big, nameA);
     label(nameA, name, 'small');
     label(cap, `MTD ${mins} min`, 'tag', [0, 1.0, 0]);
-    const rl = label(fill, `RTO ${rto} min`, 'tag', [rto * u / 2, -0.85, 0]);
+    const rl = label(fill, `Restore in ${rto} min`, 'tag', [rto * u / 2, -0.85, 0]);
     const hl = label(head, `<span class="ok">${mins - rto} min headroom</span>`, 'small', [(mins - rto) * u / 2, -0.75, 0]);
     const ticks = [];
     for (let m = 0; m <= mins; m += 5) { const tk = at(box(0.04, 0.2, 0.04, C.white, { opacity: 0.6 }), x0 + m * u, y - 0.5, 0.3); g.add(tk); ticks.push(tk); }
@@ -536,9 +536,9 @@ function rpo({ label }) {
   const q = at(txt('?', 0.9, C.amber, { glow: 0.35 }), 3.6, 2.2, 0);
   const dots = Array.from({ length: 9 }, (_, i) => at(sphere(0.1, C.white, { glow: 0.6 }), -2.2 + i * 0.55, 0.3, 0));
   B.add(dbA, off, dbB, q, ...dots);
-  label(dbA, 'Store site offline', 'tag', [0, -0.5, 0.9]);
-  label(dbB, 'Independent copy', 'tag', [0, -0.5, 0.9]);
-  label(q, '<span class="warn">proof required</span>', 'small', [0, -0.85, 0]);
+  label(dbA, 'System offline', 'tag', [0, -0.5, 0.9]);
+  label(dbB, 'Backup', 'tag', [0, -0.5, 0.9]);
+  label(q, '<span class="warn">must be tested</span>', 'small', [0, -0.85, 0]);
   g.add(A, B);
   return {
     group: g,
@@ -572,7 +572,7 @@ function standby({ label }) {
   const no = at(cross(0.35), X[0], 2.6, 0.3);
   g.add(...racks, ...stacks, ring, ck, no);
   const NAMES = ['Cold', 'Warm', 'Hot'];
-  const SUB = ['<span class="bad">too slow</span>', '<span class="ok">moderate cost</span>', '<span class="warn">highest cost</span>'];
+  const SUB = ['<span class="bad">recovers slower</span>', '<span class="ok">recommended</span>', '<span class="warn">costs more</span>'];
   racks.forEach((r, i) => { label(r, NAMES[i], 'tag big', [0, 3.75, 0]); label(r, SUB[i], 'small', [0, 3.15, 0]); });
   return {
     group: g,
@@ -605,9 +605,9 @@ function links({ label }) {
   const timer = anchor(0.6, -0.9);
   g.add(st, bat, cl, lA, lB, ...pk.flat(), ...sparks, timer);
   label(bat, 'Backup power', 'small', [0, -0.45, 0.6]);
-  label(cl, 'Cloud sync', 'tag', [0, -1.5, 0]);
-  const la = label(anchor(-2.6, 3.4), 'Primary link', 'small'); g.add(la.anchor);
-  const lb = label(anchor(0.6, 0.15), 'Backup link', 'small'); g.add(lb.anchor);
+  label(cl, 'Stock sync', 'tag', [0, -1.5, 0]);
+  const la = label(anchor(-2.6, 3.4), 'Internet connection', 'small'); g.add(la.anchor);
+  const lb = label(anchor(0.6, 0.15), 'Backup connection', 'small'); g.add(lb.anchor);
   const tl = label(timer, '', 'tag big');
   return {
     group: g,
@@ -628,7 +628,7 @@ function links({ label }) {
         });
       });
       const breached = t1 > 1.2;
-      tl.html(breached ? '<span class="bad">15-min target breached</span>' : '<span class="ok">Sync ≤ 15 min</span>');
+      tl.html(breached ? '<span class="bad">Targets missed</span>' : '<span class="ok">Recovery within 15 min</span>');
       tl.fade = ramp(s.T, 1.4, 1.8);
     },
   };
@@ -646,7 +646,7 @@ function languages({ label }) {
                       rot(cyl(0.55, 0.55, 0.04, 0xbfdbfe, { opacity: 0.35, depthWrite: false }), Math.PI / 2, 0, 0));
   const badge = anchor(0, -0.75);
   g.add(...cards, glass, badge);
-  const bl = label(badge, '<span class="warn">Fluent review required</span>', 'tag big');
+  const bl = label(badge, '<span class="warn">Checked for accuracy</span>', 'tag big');
   return {
     group: g,
     update(s) {
@@ -674,7 +674,7 @@ function pilot({ label }) {
   const nums = ['0', '30', '60'].map((n, i) => at(txt(n, 0.85, i ? C.gold : C.white, { glow: 0.25 }), ms[i].position.x, y + 1.5, 0));
   const dot = sphere(0.36, C.gold, { glow: 0.8 });
   g.add(track, fill, ...ms, ...nums, dot);
-  ['Day 0 · Approve', 'Day 30 · Pilot ends', 'Day 60 · Review'].forEach((t, i) => label(ms[i], t, 'tag', [0, -0.95, 0]));
+  ['Day 0 · Start', 'Day 30 · Pilot ends', 'Day 60 · Review results'].forEach((t, i) => label(ms[i], t, 'tag', [0, -0.95, 0]));
   return {
     group: g,
     update(s) {
@@ -692,15 +692,22 @@ function pilot({ label }) {
 
 function kpis({ label }) {
   const g = group();
-  const N = ['2', '15', '10', '5', '!'];
-  const T = ['Stock age<br>&gt; 2 min', 'Sync<br>&gt; 15 min', 'Dispatch<br>&gt; 10 min', 'Data loss<br>&gt; 5 min', 'Any unmanaged<br>access'];
-  const tiles = N.map((n, i) => {
-    const t = at(group(rbox(2.4, 3.0, 0.3, 0x1e293b, { metal: 0.4 })), -5.4 + i * 2.7, 1.8, -Math.abs(i - 2) * 0.5);
-    t.rotation.y = -(i - 2) * 0.13;
-    const num = at(txt(n, 0.95, C.amber, { glow: 0.35 }), 0, 0.5, 0.35);
-    const ring = at(torus(0.85, 0.05, C.amber, { glow: 0.9 }), 0, 0.5, 0.2);
-    t.add(num, ring); t.userData.num = num; t.userData.ring = ring;
-    label(t, T[i], 'kpi', [0, -0.85, 0.3]);
+  const clockIcon = () => {
+    const c = group(rot(cyl(0.55, 0.55, 0.12, C.dark), Math.PI / 2, 0, 0), torus(0.56, 0.06, C.amber, { glow: 0.5 }));
+    const h1 = at(box(0.07, 0.4, 0.05, C.white), 0, 0.17, 0.1); const h2 = rot(at(box(0.07, 0.3, 0.05, C.white), 0.1, -0.06, 0.1), 0, 0, -2.2);
+    c.add(h1, h2); c.userData.hand = h1; return c;
+  };
+  const ICONS = [clockIcon(), gear(0.5, C.amber, { glow: 0.2 }), database(0.42, C.amber, { glow: 0.2 }), lock(0.65, C.amber, true)];
+  const T = ['Stock delays', 'System recovery time', 'Possible data loss', 'Unauthorised access'];
+  const n = T.length;
+  const tiles = T.map((name, i) => {
+    const off = i - (n - 1) / 2;
+    const t = at(group(rbox(2.8, 3.0, 0.3, 0x1e293b, { metal: 0.4 })), off * 3.2, 1.8, -Math.abs(off) * 0.4);
+    t.rotation.y = -off * 0.13;
+    const icon = at(ICONS[i], 0, i === 2 ? 0.05 : 0.45, 0.4);
+    const ring = at(torus(0.85, 0.05, C.amber, { glow: 0.9 }), 0, 0.45, 0.2);
+    t.add(icon, ring); t.userData.icon = icon; t.userData.ring = ring;
+    label(t, name, 'kpi', [0, -0.95, 0.3]);
     return t;
   });
   g.add(...tiles);
@@ -709,10 +716,13 @@ function kpis({ label }) {
     update(s) {
       tiles.forEach((t, i) => {
         const c = s.cue(i);
-        pop(t, c + 0.15, 0.5); pop(t.userData.num, c - 0.1);
+        pop(t, c + 0.15, 0.5); pop(t.userData.icon, c - 0.1);
         pop(t.userData.ring, c - 0.3); if (c > 0.85) t.userData.ring.scale.setScalar(1 + 0.12 * wave(s.t, 1.1, i * 0.2));
         t.position.y = 1.8 + 0.08 * wave(s.t, 0.4, i * 0.2);
       });
+      tiles[0].userData.icon.userData.hand.rotation.z = -s.t * 2;
+      tiles[1].userData.icon.rotation.z = s.t * 0.8;
+      tiles[3].userData.icon.rotation.y = Math.sin(s.t) * 0.4;
     },
   };
 }
@@ -730,9 +740,9 @@ function gates({ label }) {
   const flag = at(group(at(cyl(0.06, 0.06, 2.8, C.white), 0, 0.9, 0), at(box(1.1, 0.7, 0.04, C.gold, { glow: 0.3 }), 0.55, 1.95, 0)), 4.4, -0.5, 0);
   const tok = sphere(0.4, C.teal, { glow: 0.6 });
   g.add(road, ...dashes, ...G, ...G.map((x) => x.userData.ck), flag, tok);
-  label(G[0], 'Retests passed', 'tag', [0, 3.3, 0]);
+  label(G[0], 'Tested again', 'tag', [0, 3.3, 0]);
   label(G[1], 'Costs approved', 'tag', [0, 3.3, 0]);
-  label(flag, 'Rollout', 'tag big', [0.4, 3.0, 0]);
+  label(flag, 'All stores', 'tag big', [0.4, 3.0, 0]);
   return {
     group: g,
     update(s) {
@@ -745,7 +755,7 @@ function gates({ label }) {
       pop(flag, s.T - 0.5); flag.children[1].rotation.y = 0.25 * wave(s.t, 0.8);
       let x = lerp(-5.6, -3.3, eo(ramp(s.T, 0.3, 1.2)));
       x = lerp(x, 0.7, eio(ramp(s.cue(0), 0.5, 1.5)));
-      x = lerp(x, 3.8, eio(ramp(s.cue(2), 0, 1.2)));
+      x = lerp(x, 3.8, eio(ramp(s.cue(1), 0.9, 2.1)));
       tok.position.set(x, 0.0 + 0.1 * Math.abs(wave(s.t, 1.2)), 0); pop(tok, s.T - 0.3);
     },
   };
@@ -754,11 +764,11 @@ function gates({ label }) {
 function protect({ label }) {
   const g = group();
   const cols = [C.teal, C.sky, C.violet];
-  const names = ['Market share', 'Customer trust', 'Retail resilience'];
+  const names = ['Customer trust', 'Delivery running', 'Stronger business'];
   const bars = group(...[0.5, 0.8, 1.1].map((h, i) => at(baseGeom(box(0.28, h, 0.2, C.white, { glow: 0.3 })), -0.4 + i * 0.4, -0.55, 0)));
-  const icons = [bars, heart(0.38, C.white), store(0.45, C.white, { awning: C.white })];
+  const icons = [heart(0.38, C.white), chevrons(0.32, C.white), bars];
   const sh = cols.map((c, i) => {
-    const s = at(group(shield(0.95, c, { glow: 0.12 }), at(icons[i], 0, i === 2 ? -0.4 : 0.1, 0.5)), -4.2 + i * 4.0, 1.4, 0);
+    const s = at(group(shield(0.95, c, { glow: 0.12 }), at(icons[i], 0, 0.1, 0.5)), -4.2 + i * 4.0, 1.4, 0);
     label(s, names[i], 'tag', [0, -2.35, 0]);
     return s;
   });
@@ -787,7 +797,7 @@ function signoff({ label }) {
   pen.children[1].rotation.x = Math.PI; pen.children[1].position.y = 0.0;
   const seal = at(group(rot(cyl(0.55, 0.55, 0.06, C.gold, { metal: 0.8 }), Math.PI / 2, 0, 0), at(check(0.25, C.dark), 0, 0, 0.08)), 1.2, -0.7, 0.12);
   doc.add(sig, pen, seal);
-  const chips = ['Formal sign-off', 'Executive accountability', 'Evidence-based rollout'].map((t, i) => {
+  const chips = ['Approve the pilot', 'Assign a responsible manager', 'Decide on full rollout'].map((t, i) => {
     const ck = at(check(0.38), 1.9, 3.0 - i * 1.25, 0);
     const a = anchor(4.0, 3.0 - i * 1.25); g.add(ck, a);
     return { ck, L: label(a, t, 'tag') };
@@ -809,9 +819,32 @@ function signoff({ label }) {
   };
 }
 
+function thanks({ label }) {
+  const g = group();
+  const ring = at(arcRing(4.1, 0.12, C.gold), 0, 1.2, -0.6);
+  const ty = at(txt('Thank you', 1.0, C.white, { glow: 0.12 }), 0, 1.45, 0.2);
+  const orbit = at(group(), 0, 1.2, 0); orbit.rotation.x = 1.2;
+  [C.amber, C.teal, C.white, C.sky, C.gold, C.green, C.violet, C.red].forEach((c, i, arr) => {
+    const a = (i / arr.length) * Math.PI * 2;
+    orbit.add(at(rbox(0.5, 0.4, 0.4, c, { glow: 0.2 }), Math.cos(a) * 5.3, Math.sin(a) * 5.3, 0));
+  });
+  g.add(ring, ty, orbit);
+  label(ty, 'SIXTY60 · AUDIT &amp; RISK COMMITTEE', 'tag', [0, -1.3, 0.3]);
+  return {
+    group: g,
+    update(s) {
+      ring.userData.set(eio(s.T / 1.6));
+      pop(ty, s.T - 0.1, 0.7);
+      orbit.rotation.z = s.t * 0.4;
+      orbit.children.forEach((p, i) => { p.rotation.set(s.t * (0.7 + i * 0.1), s.t * 0.5, 0); pop(p, s.T - 0.3 - i * 0.06, 0.5); });
+      g.rotation.y = Math.sin(s.t * 0.5) * 0.15;
+    },
+  };
+}
+
 export const SCENES = {
   title, surge, power, clock, goods, phone, conveyor, pillars, risk, promise,
   sam, drift, maturity, controls,
   mtd, rpo, standby, links, languages,
-  pilot, kpis, gates, protect, signoff,
+  pilot, kpis, gates, protect, signoff, thanks,
 };

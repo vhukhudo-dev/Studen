@@ -43,8 +43,12 @@
 
   #caption { position: absolute; left: 72px; bottom: 64px; max-width: 1180px; padding-left: 26px; }
   #caption::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 7px; border-radius: 4px; background: var(--accent); }
-  #caption .h { font-size: 60px; font-weight: 800; line-height: 1.05; letter-spacing: -.01em; }
+  #caption .h { font-size: 54px; font-weight: 800; line-height: 1.05; letter-spacing: -.01em; }
   #caption .s { font-size: 28px; font-weight: 500; color: #c3cde3; margin-top: 12px; }
+  /* Live words: what the presenter is saying right now, word by word. */
+  #caption .live { font-size: 40px; font-weight: 600; line-height: 1.2; margin-top: 14px; min-height: 48px; white-space: nowrap; }
+  #caption .live span { display: inline-block; margin-right: .27em; color: #f1f5ff; will-change: transform, opacity; }
+  #caption .live span.now { color: var(--accent); }
   body.corner-left #caption { left: auto; right: 72px; text-align: right; padding-left: 0; padding-right: 26px; }
   body.corner-left #caption::before { left: auto; right: 0; }
 
@@ -62,7 +66,7 @@
   <canvas id="c" width="1920" height="1080"></canvas>
   <div id="labels"></div>
   <div id="header"><span class="num">01</span><span class="title"></span><span class="dots"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></span></div>
-  <div id="caption"><div class="h"></div><div class="s"></div></div>
+  <div id="caption"><div class="h"></div><div class="s"></div><div class="live"></div></div>
   <div id="pip">your video here</div>
 </div>
 <script type="module" src="./scene.js"></script>
