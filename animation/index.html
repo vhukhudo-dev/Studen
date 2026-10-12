@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sixty60 Board Animation</title>
+<script type="importmap">
+{ "imports": {
+    "three": "../node_modules/three/build/three.module.js",
+    "three/addons/": "../node_modules/three/examples/jsm/"
+} }
+</script>
+<style>
+  :root { --accent: #f59e0b; --pip-w: 360px; }
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #070b16; }
+  body { font-family: 'Inter', 'Inter Display', system-ui, sans-serif; color: #e8eefc; }
+  #stage { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+  #bg { position: absolute; inset: 0; }
+  canvas { position: absolute; inset: 0; }
+  #labels { position: absolute; inset: 0; pointer-events: none; }
+
+  .lbl { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); white-space: nowrap;
+         font-weight: 600; font-size: 24px; letter-spacing: .01em; text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+  .lbl.small { font-size: 21px; font-weight: 500; color: #c7d2fe; }
+  .lbl.tag { font-size: 22px; padding: 6px 14px; border-radius: 999px; background: rgba(10,16,32,.72);
+             border: 1px solid rgba(255,255,255,.18); backdrop-filter: blur(4px); }
+  .lbl.big { font-size: 34px; font-weight: 800; }
+  .lbl.tile { font-size: 25px; font-weight: 700; text-align: center; white-space: normal; width: 300px; line-height: 1.15; }
+  .lbl.kpi { font-size: 22px; font-weight: 600; text-align: center; white-space: normal; width: 200px; line-height: 1.2; }
+  .lbl.stamp { font-size: 46px; font-weight: 900; letter-spacing: .08em; color: #fbbf24; padding: 10px 28px;
+               border: 5px solid #fbbf24; border-radius: 14px; transform: translate(-50%,-50%) rotate(-8deg);
+               background: rgba(30,20,0,.35); }
+  .lbl .strike { text-decoration: line-through; text-decoration-thickness: 3px; text-decoration-color: #ef4444; }
+  .lbl .ok { color: #34d399; } .lbl .bad { color: #f87171; } .lbl .warn { color: #fbbf24; }
+
+  #header { position: absolute; left: 72px; top: 56px; display: flex; align-items: center; gap: 18px; }
+  #header .num { font-weight: 800; font-size: 22px; padding: 8px 14px; border-radius: 10px;
+                 background: var(--accent); color: #0b1020; letter-spacing: .04em; }
+  #header .title { font-weight: 700; font-size: 32px; letter-spacing: .005em; }
+  #header .dots { display: flex; gap: 8px; margin-left: 10px; }
+  #header .dots i { width: 34px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.2); position: relative; overflow: hidden; }
+  #header .dots i b { position: absolute; inset: 0; width: 0; background: var(--accent); }
+
+  #caption { position: absolute; left: 72px; bottom: 64px; max-width: 1180px; padding-left: 26px; }
+  #caption::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 7px; border-radius: 4px; background: var(--accent); }
+  #caption .h { font-size: 60px; font-weight: 800; line-height: 1.05; letter-spacing: -.01em; }
+  #caption .s { font-size: 28px; font-weight: 500; color: #c3cde3; margin-top: 12px; }
+  body.corner-left #caption { left: auto; right: 72px; text-align: right; padding-left: 0; padding-right: 26px; }
+  body.corner-left #caption::before { left: auto; right: 0; }
+
+  /* Placeholder showing where the presenter video will sit (preview only). */
+  #pip { position: absolute; right: 40px; bottom: 40px; width: var(--pip-w); height: 400px; border-radius: 26px;
+         border: 2px dashed rgba(255,255,255,.35); display: none; align-items: center; justify-content: center;
+         color: rgba(255,255,255,.6); font-size: 20px; }
+  body.corner-left #pip { right: auto; left: 40px; }
+  body.show-pip #pip { display: flex; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bg"></div>
+  <canvas id="c" width="1920" height="1080"></canvas>
+  <div id="labels"></div>
+  <div id="header"><span class="num">01</span><span class="title"></span><span class="dots"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></span></div>
+  <div id="caption"><div class="h"></div><div class="s"></div></div>
+  <div id="pip">your video here</div>
+</div>
+<script type="module" src="./scene.js"></script>
+</body>
+</html>

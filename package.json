@@ -1,0 +1,14 @@
+{
+  "name": "sixty60-board-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "3D animated board presentation with the presenter in a picture-in-picture corner, synced to the speech",
+  "type": "module",
+  "scripts": {
+    "build": "python3 tools/build.py input/*.mp4",
+    "preview": "npx serve ."
+  },
+  "dependencies": {
+    "three": "0.169.0"
+  }
+}
