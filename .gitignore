@@ -5,3 +5,4 @@ input/*
 output/*
 !output/.gitkeep
 __pycache__/
+script/timings.json

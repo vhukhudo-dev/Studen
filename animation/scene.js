@@ -12,11 +12,19 @@ document.body.classList.toggle('corner-left', corner === 'left');
 if (params.has('pip')) document.body.classList.add('show-pip');
 
 const getJSON = (u) => fetch(u).then((r) => { if (!r.ok) throw new Error(`${u}: ${r.status}`); return r.json(); });
-const [script, timings, fontJson] = await Promise.all([
+// No timings yet (nothing recorded/aligned): spread beats over ~3 minutes by word count.
+function estimateTimings(script, duration = 180) {
+  const words = script.beats.map((b) => b.text.split(/\s+/).length);
+  const per = (duration - 1.5) / words.reduce((a, b) => a + b, 0);
+  let t = 0.5;
+  return { method: 'estimate', duration, beats: script.beats.map((b, i) => { const start = i ? t : 0; t += words[i] * per; return { id: b.id, start, cues: [] }; }) };
+}
+const [script, timingsFile, fontJson] = await Promise.all([
   getJSON('../script/beats.json'),
-  getJSON(params.get('timings') || '../script/timings.json'),
+  getJSON(params.get('timings') || '../script/timings.json').catch(() => null),
   getJSON('../node_modules/three/examples/fonts/helvetiker_bold.typeface.json'),
 ]);
+const timings = timingsFile || estimateTimings(script);
 setFont(new FontLoader().parse(fontJson));
 
 // ---------- timeline ----------

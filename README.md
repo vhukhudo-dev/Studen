@@ -34,7 +34,7 @@ A 3-minute speech takes about 25–30 minutes to render on 4 CPU cores.
 
 ## Fixing timing by hand
 
-If a visual lands too early or late, edit the `start` (seconds) of that beat in `script/timings.json`. Then rebuild without re-running the sync:
+If a visual lands too early or late, edit the `start` (seconds) of that beat in `script/timings.json` (written by the sync step; not kept in git). Then rebuild without re-running the sync:
 
 ```bash
 python3 tools/build.py input/*.mp4 --skip-align
